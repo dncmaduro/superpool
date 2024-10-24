@@ -38,7 +38,8 @@ export const SeasonDetail = (props: SeasonDetailProps) => {
 
   return (
     <div className="pt-10 px-6 flex flex-col">
-      <span className="font-bold text-2xl">{season?.name}</span>
+      <Link href="/">Về trang chủ đi</Link>
+      <span className="font-bold text-2xl mt-6">{season?.name}</span>
       <span className="text-green-700 font-bold">Chạm {season?.win}</span>
       <div className="mt-10">
         <span className="font-bold text-lg mt-4">Tỉ số hiện tại:</span>
