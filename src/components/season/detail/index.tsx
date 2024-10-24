@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Match, MatchProps } from "./match";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 interface SeasonDetailProps {
   id: number;
@@ -38,7 +39,11 @@ export const SeasonDetail = (props: SeasonDetailProps) => {
 
   return (
     <div className="pt-10 px-6 flex flex-col">
-      <Link href="/">Về trang chủ đi</Link>
+      <Link href="/">
+        <Button variant="link">
+          <ArrowLeft /> Về trang chủ đi
+        </Button>
+      </Link>
       <span className="font-bold text-2xl mt-6">{season?.name}</span>
       <span className="text-green-700 font-bold">Chạm {season?.win}</span>
       <div className="mt-10">
