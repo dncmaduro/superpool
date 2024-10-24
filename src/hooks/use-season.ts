@@ -10,10 +10,7 @@ export const useSeason = () => {
   const { toast } = useToast();
 
   const createSeason = async (name: string) => {
-    const { data, error } = await supabase
-      .from("season")
-      .insert([{ name }])
-      .select();
+    const { data } = await supabase.from("season").insert([{ name }]).select();
     if (data) {
       toast({
         title: "Tạo giải đấu thành công",
@@ -26,5 +23,21 @@ export const useSeason = () => {
     }
   };
 
-  return { createSeason };
+  const getSeasons = async () => {
+    const { data } = await supabase.from("season").select("*");
+    if (data) {
+      toast({
+        title: "Đấy xem giải đấu đi!",
+      });
+      return data;
+    }
+
+    toast({
+      title: "Giời ơi load lại đi không lấy được thông tin rồi!",
+      variant: "destructive",
+    });
+    return null;
+  };
+
+  return { createSeason, getSeasons };
 };
