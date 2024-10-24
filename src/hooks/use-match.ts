@@ -28,5 +28,29 @@ export const useMatch = () => {
     return null;
   };
 
-  return { getMatches };
+  const createMatch = async (
+    season_id: number,
+    point1: number,
+    point2: number,
+  ) => {
+    const { data } = await supabase
+      .from("match")
+      .insert([{ season_id, point1, point2 }])
+      .select();
+    if (data) {
+      toast({
+        title: "Oke thế là xong trận mới",
+      });
+
+      return data;
+    }
+
+    toast({
+      title: "Tạo lại đê",
+      variant: "destructive",
+    });
+    return null;
+  };
+
+  return { getMatches, createMatch };
 };

@@ -55,5 +55,59 @@ export const useSeason = () => {
     return null;
   };
 
-  return { createSeason, getSeasons, getSeason };
+  const newMatch = async (id: number, win: boolean) => {
+    const { data } = await supabase.from("season").select("*").eq("id", id);
+    if (data) {
+      const season = data[0];
+      if (win) {
+        const { data: data2 } = await supabase
+          .from("season")
+          .update({ point1: season.point1 + 1 })
+          .eq("id", id)
+          .select();
+
+        if (data2) {
+          toast({
+            title: "Oke giờ thì đã hoàn thành xong trận",
+          });
+
+          return data2;
+        }
+
+        toast({
+          title: "Nó bị failed, check lại data nhé",
+          variant: "destructive",
+        });
+        return null;
+      }
+
+      const { data: data2 } = await supabase
+        .from("season")
+        .update({ point2: season.point2 + 1 })
+        .eq("id", id)
+        .select();
+
+      if (data2) {
+        toast({
+          title: "Oke giờ thì đã hoàn thành xong trận",
+        });
+
+        return data2;
+      }
+
+      toast({
+        title: "Nó bị failed, check lại data nhé",
+        variant: "destructive",
+      });
+      return null;
+    }
+
+    toast({
+      title: "Giời ơi load lại đi không lấy được thông tin!",
+      variant: "destructive",
+    });
+    return null;
+  };
+
+  return { createSeason, getSeasons, getSeason, newMatch };
 };

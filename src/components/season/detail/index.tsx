@@ -6,6 +6,8 @@ import { useMatch } from "@/hooks/use-match";
 import { useSeason } from "@/hooks/use-season";
 import { useEffect, useState } from "react";
 import { Match, MatchProps } from "./match";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface SeasonDetailProps {
   id: number;
@@ -16,12 +18,14 @@ export const SeasonDetail = (props: SeasonDetailProps) => {
   const { getMatches } = useMatch();
   const [season, setSeason] = useState<SeasonProps>();
   const [matches, setMatches] = useState<MatchProps[]>();
+  const [isEnd, setIsEnd] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchSeason = async () => {
       const res = await getSeason(Number(props.id));
       if (res) {
         setSeason(res);
+        setIsEnd(Math.max(res.point1, res.point2) >= res.win);
         const res2 = await getMatches(res.id || 0);
         if (res2) {
           setMatches(res2);
@@ -39,12 +43,16 @@ export const SeasonDetail = (props: SeasonDetailProps) => {
       <div className="mt-10">
         <span className="font-bold text-lg mt-4">Tỉ số hiện tại:</span>
         <span className="ml-4">
-          <span>
+          <span
+            className={`${isEnd && (season?.point1 || 0) > (season?.point2 || 0) && "text-yellow-500 font-bold"}`}
+          >
             {NAMES.p1}{" "}
             <span className="p-2 bg-gray-100 ml-2">{season?.point1}</span>
           </span>
           <span className="mx-4">-</span>
-          <span>
+          <span
+            className={`${isEnd && (season?.point1 || 0) < (season?.point2 || 0) && "text-yellow-500 font-bold"}`}
+          >
             <span className="p-2 mr-2 bg-gray-100">{season?.point2}</span>{" "}
             {NAMES.p2}
           </span>
@@ -61,6 +69,13 @@ export const SeasonDetail = (props: SeasonDetailProps) => {
           />
         ))}
       </div>
+      {!isEnd && (
+        <Link href={`/season/${props.id}/new`}>
+          <Button className="mt-6 w-[150px]" variant="create">
+            Thêm trận mới
+          </Button>
+        </Link>
+      )}
     </div>
   );
 };
