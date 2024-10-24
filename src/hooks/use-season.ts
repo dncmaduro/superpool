@@ -39,5 +39,21 @@ export const useSeason = () => {
     return null;
   };
 
-  return { createSeason, getSeasons };
+  const getSeason = async (id: number) => {
+    const { data } = await supabase.from("season").select("*").eq("id", id);
+    if (data) {
+      toast({
+        title: "Xem giải đê",
+      });
+      return data[0];
+    }
+
+    toast({
+      title: "Giời ơi load lại đi không lấy được thông tin!",
+      variant: "destructive",
+    });
+    return null;
+  };
+
+  return { createSeason, getSeasons, getSeason };
 };
